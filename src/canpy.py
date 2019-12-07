@@ -13,9 +13,14 @@ def loadImage(directory):
 
     return image
 
+def resizeImage(image, width, height):
+    resized_image = image.resize((width, height))
+    return resized_image
+
 def showImage(image):
     image.show()
 
 if __name__ == "__main__":
     art = loadImage('img/background.jpg')
+    art = resizeImage(art, 512, 512)
     showImage(art)
