@@ -1,3 +1,4 @@
 feed:
     name: 'novo_post'
     background: 'img/background.jpg'
+    center: text 'COMPILADORES' #fff

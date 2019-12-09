@@ -82,7 +82,7 @@ if __name__ == "__main__":
     # logo = loadImage('img/logo.png')
     # logo = resizeImage(logo, 96, 96) # TODO: aspect-ratio && transparency
     # feed = imageToImage('bottom-center', logo, feed)
-    # feed = textToImage('center', feed, 'UMIC MOOVE', 120, 'white', 'Montserrat-Bold')
+    feed = textToImage('center', feed, 'COMPILADORES', 120, 'white', 'Montserrat-Bold')
     saveImage(feed, 'feed')
     # feed = resizeImage(feed, 512, 512)
     showImage(feed)
