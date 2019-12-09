@@ -7,7 +7,7 @@ with open('canva.cnv', 'r') as file:
 grammar = Lark(r"""
 ?start : feed
 
-?feed : "feed" ":" name back
+?feed  : "feed" ":" name back
 
 ?name  : "name:" "'" NAME "'"      -> feed_name
 
@@ -35,16 +35,21 @@ class CanvaTransformer(InlineTransformer):
 def eval_canva(expr):
     head, *args = expr
     
-    print(head)
     if head == 'feed':
+        info = []
         for arg in args:
-            eval_canva(arg)
+            info.append(eval_canva(arg))
+        
+        name = info[0]
+        directory = info[1]
+
+        image = images.loadImage(directory)
+        images.saveImage(image, name)
+        images.showImage(image)
     elif head == 'name':
-        # setNome
-        return args
+        return args[0]
     elif head == 'back':
-        # setBackground
-        return args
+        return args[0]
     else:
         raise ValueError('argumento inválido para: %r' % head)
 

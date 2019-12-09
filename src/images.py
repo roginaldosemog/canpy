@@ -6,7 +6,6 @@ import sys
 WIDTH = 1080
 HEIGHT = 1080
 
-# Cria uma imagem
 def createImage(width, height, color):
     image = Image.new('RGB', (width, height), color)
     return image
@@ -50,8 +49,8 @@ def showImage(image):
     image.show()
 
 # Salva a imagem na pasta img
-def saveImage(image, name, extension):
-    image.save('img/' + name, extension)
+def saveImage(image, name):
+    image.save('img/' + name + '.png', 'PNG')
 
 # Funções que retornam posicionamento de imagem
 def getPositionFeed(mode, img_w, img_h, width, height):
@@ -80,10 +79,10 @@ def getPositionFeed(mode, img_w, img_h, width, height):
 if __name__ == "__main__":
     # feed = createImage(WIDTH, FEED_HEIGHT, '#406040')
     feed = loadImage('img/background.jpg')
-    logo = loadImage('img/logo.png')
-    logo = resizeImage(logo, 96, 96) # TODO: aspect-ratio && transparency
-    feed = imageToImage('bottom-center', logo, feed)
-    feed = textToImage('center', feed, 'UMIC MOOVE', 120, 'white', 'Montserrat-Bold')
-    saveImage(feed, 'feed.png', 'JPEG')
-    feed = resizeImage(feed, 512, 512)
+    # logo = loadImage('img/logo.png')
+    # logo = resizeImage(logo, 96, 96) # TODO: aspect-ratio && transparency
+    # feed = imageToImage('bottom-center', logo, feed)
+    # feed = textToImage('center', feed, 'UMIC MOOVE', 120, 'white', 'Montserrat-Bold')
+    saveImage(feed, 'feed')
+    # feed = resizeImage(feed, 512, 512)
     showImage(feed)
