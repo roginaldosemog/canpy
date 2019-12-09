@@ -4,8 +4,7 @@ from PIL import Image, ImageFont, ImageDraw
 import sys
 
 WIDTH = 1080
-FEED_HEIGHT = 1080
-STORIES_HEIGHT = 1920
+HEIGHT = 1080
 
 # Cria uma imagem
 def createImage(width, height, color):
@@ -21,6 +20,7 @@ def loadImage(directory):
         print("loadImage: Unable to load image")    
         sys.exit(1)
 
+    image = resizeImage(image, WIDTH, HEIGHT)
     return image
 
 # Redimensiona a imagem
