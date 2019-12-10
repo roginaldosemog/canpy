@@ -1,4 +1,5 @@
 feed:
-    name: 'novo_post'
+    name: 'ao_vivao'
     background: 'img/background.jpg'
-    center: text 'COMPILADORES' #fff
+    text: 'Toscanin' #e2e2e2
+    logo: 'img/logo.png'

@@ -13,7 +13,7 @@ def createImage(width, height, color):
 # Carrega uma imagem
 def loadImage(directory):
     try:
-        image = Image.open(directory)
+        image = Image.open(directory).convert("RGBA")
         
     except IOError:
         print("loadImage: Unable to load image")    

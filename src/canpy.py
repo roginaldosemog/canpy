@@ -7,15 +7,18 @@ with open('canva.cnv', 'r') as file:
 grammar = Lark(r"""
 ?start : feed
 
-?feed  : "feed" ":" name back elem?
+?feed  : "feed" ":" name back elem*
 
 ?name  : "name:" NAME               -> feed_name
 
 ?back  : "background:" DIR          -> background
 
-?elem  : "center:" mode
+?elem  : "text:" text
+       | "logo:" logo 
 
-?mode  : "text" TEXT COLOR          -> text
+?text  : TEXT COLOR                 -> text
+
+?logo  : DIR                        -> logo
 
 // Terminals
 DIR   : /\'([\w]+[\/])*[\w]+[.][\w]+\'/
@@ -45,6 +48,10 @@ class CanvaTransformer(InlineTransformer):
     def text(self, text, color):
         text = text[1:-1]
         return ('text', str(text), str(color))
+    
+    def logo(self, dir):
+        dir = dir[1:-1]
+        return ('logo', str(dir))
 
 def eval_canva(expr):
     head, *args = expr
@@ -54,22 +61,33 @@ def eval_canva(expr):
         for arg in args:
             feed_info.append(eval_canva(arg))
 
-        print(feed_info[2][0])
-        
-        name = feed_info[0]
-        directory = feed_info[1]
-        text = feed_info[2][0]
-        text_color = feed_info[2][1]
+        print(feed_info)
 
-        image = images.loadImage(directory)
-        image = images.textToImage('center', image, text, 96, text_color, 'Montserrat-Bold')
+        name = feed_info[0]
+        dir = feed_info[1]
+        image = images.loadImage(dir)
+
+        if len(feed_info) > 2:
+            text = feed_info[2][0]
+            text_color = feed_info[2][1]
+            image = images.textToImage('center', image, text, 96, text_color, 'Montserrat-Bold')
+
+        if len(feed_info) > 3:
+            logo_dir = feed_info[3][0]
+            logo = images.loadImage(logo_dir)
+            logo = images.resizeImage(logo, 96, 96)
+            logo = images.imageToImage('bottom-center', logo, image)
+
         images.saveImage(image, name)
+        image = images.resizeImage(image, 512, 512)
         images.showImage(image)
     elif head == 'name':
         return args[0]
     elif head == 'back':
         return args[0]
     elif head == 'text':
+        return args
+    elif head == 'logo':
         return args
     else:
         raise ValueError('argumento inválido para: %r' % head)
