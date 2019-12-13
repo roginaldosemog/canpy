@@ -16,19 +16,21 @@ grammar = Lark(r"""
 ?elem  : "text:" text
        | "logo:" logo 
 
-?text  : TEXT COLOR                 -> text
+?text  : POS TEXT COLOR                 -> text
 
-?logo  : DIR                        -> logo
+?logo  : POS DIR                        -> logo
 
 // Terminals
+POS   : /[\w]+[-]?[\w]*/
 DIR   : /\'([\w]+[\/])*[\w]+[.][\w]+\'/
-NAME  : /\'[\w]+\'/
+NAME  : /\'[\w]{1,32}\'/
 TEXT  : /\'[\w\s]+\'/
 COLOR : /[#][0-9a-fA-F]{3,6}/
 %ignore /\s+/
 """)
 
 class CanvaTransformer(InlineTransformer):
+    pos = str
     dir = str
     name = str
     text = str
@@ -45,13 +47,13 @@ class CanvaTransformer(InlineTransformer):
         dir = dir[1:-1]
         return ('back', str(dir))
 
-    def text(self, text, color):
+    def text(self, pos, text, color):
         text = text[1:-1]
-        return ('text', str(text), str(color))
+        return ('text', str(pos), str(text), str(color))
     
-    def logo(self, dir):
+    def logo(self, pos, dir):
         dir = dir[1:-1]
-        return ('logo', str(dir))
+        return ('logo', str(pos), str(dir))
 
 def eval_canva(expr):
     head, *args = expr
@@ -68,15 +70,17 @@ def eval_canva(expr):
         image = images.loadImage(dir)
 
         if len(feed_info) > 2:
-            text = feed_info[2][0]
-            text_color = feed_info[2][1]
-            image = images.textToImage('center', image, text, 96, text_color, 'Montserrat-Bold')
+            pos = feed_info[2][0]
+            text = feed_info[2][1]
+            text_color = feed_info[2][2]
+            image = images.textToImage(pos, image, text, 96, text_color, 'Montserrat-Bold')
 
         if len(feed_info) > 3:
-            logo_dir = feed_info[3][0]
+            pos = feed_info[3][0]
+            logo_dir = feed_info[3][1]
             logo = images.loadImage(logo_dir)
             logo = images.resizeImage(logo, 96, 96)
-            logo = images.imageToImage('bottom-center', logo, image)
+            logo = images.imageToImage(pos, logo, image)
 
         images.saveImage(image, name)
         image = images.resizeImage(image, 512, 512)

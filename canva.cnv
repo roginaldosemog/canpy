@@ -1,5 +1,5 @@
 feed:
-    name: 'hugo_primo_do_geovanne'
+    name: 'apresentacao'
     background: 'img/background.jpg'
-    text: 'Liverpool 5x0' #fff
-    logo: 'img/logo.png'
+    text: center 'Liverpool 5x0' #fff
+    logo: bottom-center 'img/logo.png'
