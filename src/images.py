@@ -50,7 +50,7 @@ def showImage(image):
 
 # Salva a imagem na pasta img
 def saveImage(image, name):
-    image.save('img/' + name + '.png', 'PNG')
+    image.save('saves/' + name + '.png', 'PNG')
 
 # Funções que retornam posicionamento de imagem
 def getPositionFeed(mode, img_w, img_h, width, height):

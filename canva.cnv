@@ -1,6 +1,6 @@
 feed:
-    name: 'apresentacao'
+    name: 'pes2020'
     background: 'img/soccer.jpeg'
-    logo: top-left 'img/logo.png'
-    text: top-right 'PES 2020' #fff
-    text: bottom-left 'Amanhã 20h' #b22
+    logo: top-center 'img/logo.png'
+    text: center big 'PES 2020' #fff
+    text: bottom-center small 'Amanhã 20h' #fff

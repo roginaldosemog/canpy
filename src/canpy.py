@@ -16,14 +16,15 @@ grammar = Lark(r"""
 ?elem  : "text:" text
        | "logo:" logo 
 
-?text  : POS TEXT COLOR                 -> text
+?text  : POS SIZE TEXT COLOR                 -> text
 
 ?logo  : POS DIR                        -> logo
 
 // Terminals
 POS   : /[\w]+[-]?[\w]*/
 DIR   : /\'([\w]+[\/])*[\w]+[.][\w]+\'/
-NAME  : /\'[\w]{1,32}\'/
+SIZE  : /[\w]+/
+NAME  : /\'[\w]+\'/
 TEXT  : /\'[\w\s\!\/\-]+\'/
 COLOR : /[#][0-9a-fA-F]{3,6}/
 %ignore /\s+/
@@ -32,6 +33,7 @@ COLOR : /[#][0-9a-fA-F]{3,6}/
 class CanvaTransformer(InlineTransformer):
     pos = str
     dir = str
+    size = str
     name = str
     text = str
     color = str
@@ -47,9 +49,9 @@ class CanvaTransformer(InlineTransformer):
         dir = dir[1:-1]
         return ('back', str(dir))
 
-    def text(self, pos, text, color):
+    def text(self, pos, size, text, color):
         text = text[1:-1]
-        return ('text', str(pos), str(text), str(color))
+        return ('text', str(pos), str(size), str(text), str(color))
     
     def logo(self, pos, dir):
         dir = dir[1:-1]
@@ -70,9 +72,19 @@ def eval_canva(expr):
                 image = images.loadImage(back)
             elif (arg[0]=='text'):
                 pos = arg[1]
-                text = arg[2]
-                text_color = arg[3]
-                image = images.textToImage(pos, image, text, 96, text_color, 'Montserrat-Bold')
+                size = arg[2]
+                text = arg[3]
+                text_color = arg[4]
+                font_size = 96
+
+                if (size == 'small'):
+                    font_size = 60
+                elif (size == 'normal'):
+                    font_size = 74
+                elif(size == 'big'):
+                    font_size = 122
+
+                image = images.textToImage(pos, image, text, font_size, text_color, 'Montserrat-Bold')
             elif (arg[0]=='logo'):
                 pos = arg[1]
                 logo_dir = arg[2]
@@ -85,6 +97,8 @@ def eval_canva(expr):
         images.saveImage(image, name)
         image = images.resizeImage(image, 512, 512)
         images.showImage(image)
+        print("Imagem criada com sucesso!")
+        print("A imagem foi salva: saves/%s.png" % name)
     else:
         raise ValueError('argumento inválido para: %r' % head)
 
