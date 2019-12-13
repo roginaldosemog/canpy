@@ -59,40 +59,32 @@ def eval_canva(expr):
     head, *args = expr
     
     if head == 'feed':
-        feed_info = []
+        image = images.createImage(1080, 1080, '#000')
+        name = None
+
         for arg in args:
-            feed_info.append(eval_canva(arg))
-
-        print(feed_info)
-
-        name = feed_info[0]
-        dir = feed_info[1]
-        image = images.loadImage(dir)
-
-        if len(feed_info) > 2:
-            pos = feed_info[2][0]
-            text = feed_info[2][1]
-            text_color = feed_info[2][2]
-            image = images.textToImage(pos, image, text, 96, text_color, 'Montserrat-Bold')
-
-        if len(feed_info) > 3:
-            pos = feed_info[3][0]
-            logo_dir = feed_info[3][1]
-            logo = images.loadImage(logo_dir)
-            logo = images.resizeImage(logo, 96, 96)
-            logo = images.imageToImage(pos, logo, image)
+            if (arg[0]=='name'):
+                name = arg[1]
+            elif (arg[0]=='back'):
+                back = arg[1]
+                image = images.loadImage(back)
+            elif (arg[0]=='text'):
+                pos = arg[1]
+                text = arg[2]
+                text_color = arg[3]
+                image = images.textToImage(pos, image, text, 96, text_color, 'Montserrat-Bold')
+            elif (arg[0]=='logo'):
+                pos = arg[1]
+                logo_dir = arg[2]
+                logo = images.loadImage(logo_dir)
+                logo = images.resizeImage(logo, 96, 96)
+                logo = images.imageToImage(pos, logo, image)
+            else:
+                raise ValueError('Chave inválida')
 
         images.saveImage(image, name)
         image = images.resizeImage(image, 512, 512)
         images.showImage(image)
-    elif head == 'name':
-        return args[0]
-    elif head == 'back':
-        return args[0]
-    elif head == 'text':
-        return args
-    elif head == 'logo':
-        return args
     else:
         raise ValueError('argumento inválido para: %r' % head)
 

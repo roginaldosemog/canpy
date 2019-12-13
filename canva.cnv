@@ -1,5 +1,6 @@
 feed:
     name: 'apresentacao'
-    background: 'img/background.jpg'
-    text: center 'Liverpool 5x0' #fff
-    logo: bottom-center 'img/logo.png'
+    background: 'img/soccer.jpeg'
+    logo: top-left 'img/logo.png'
+    text: center 'PES 2020' #fff
+    text: bottom-right 'Amanhã às 20h' #fff
